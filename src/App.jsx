@@ -1,9 +1,11 @@
+import Header from "./components/Header";
+import Home from "./components/Home";
+
 function App() {
   return (
     <>
-      <h1 className="text-3xl font-bold">
-        React WORLD!
-      </h1>
+      <Header />
+      <Home />
     </>
   );
 }
