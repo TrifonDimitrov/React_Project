@@ -1,11 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 
-import Header from "./components/Header";
-import Home from "./components/Home";
-import Products from "./components/Products";
-import Company from "./components/Company";
-import Register from "./components/Register";
-import Login from "./components/Login";
+import Header from "./components/header/Header";
+import Home from "./components/home/Home";
+import Products from "./components/products/Products";
+import Company from "./components/company/Company";
+import Register from "./components/register/Register";
+import Login from "./components/login/Login";
 
 
 function App() {
