@@ -9,3 +9,5 @@ export const getAll = async () => {
 
   return products;
 };
+
+export const getOne = (modelId) => request.get(`${BASE_URL}/${modelId}`)

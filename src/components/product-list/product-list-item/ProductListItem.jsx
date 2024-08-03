@@ -23,7 +23,7 @@ export default function ProductListItem({
       <h3 className="mt-4 text-sm text-gray-700">{brand}</h3>
       <p className="mt-1 text-lg font-medium text-gray-900">{price}</p>
       <div className="text-right pr-5">
-      <Link to={`/details/${_id}`} className="text-blue-500 hover:text-blue-700 font-medium">Details</Link>
+      <Link to={`/products/${_id}`} className="text-blue-500 hover:text-blue-700 font-medium">Details</Link>
       </div>
     </div>
   );
