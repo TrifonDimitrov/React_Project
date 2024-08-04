@@ -22,19 +22,24 @@ export default function ProductDetails () {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4">{product.brand} {product.model}</h1>
+      <div className="max-w-md mx-auto">
         <img
           src={product.imageUrl}
-          alt={product.description}
+          alt={product.model}
           className="w-full h-auto mb-4"
         />
+        <h3 className="text-3xl font-bold mb-5">{product.brand} {product.model}</h3>
         <p className="text-xl mb-2"><strong>Price:</strong> {product.price}</p>
         <p className="text-lg mb-2"><strong>Cooling Capacity:</strong> {product.coolingCapacity}</p>
         <p className="text-lg mb-2"><strong>Heating Capacity:</strong> {product.heatingCapacity}</p>
         <p className="text-lg mb-2"><strong>Energy Efficiency Rating:</strong> {product.energyEfficiencyRating}</p>
         <p className="text-base mb-4">{product.description}</p>
+        <div className="flex justify-end space-x-4">
+          <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Edit</button>
+          <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700">Delete</button>
+        </div>
       </div>
+      
     </div>
   );
 }
