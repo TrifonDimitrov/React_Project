@@ -1,6 +1,24 @@
 import React from "react";
+import { useForm } from "../../hooks/useForm";
+import { useLogin } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
+export default function Login() {
+  const login = useLogin();
+  const navigate = useNavigate();
+  const { value, changeHandler, submitHandler } = useForm(
+    { email: "", password: "" },
+     async ({ email, password }) => {
+        try {
+           await login(email, password);
+           navigate('/')
+        } catch (error) {
+            console.log(error.massage);
+            
+        } 
+    }
+  );
+
   return (
     <>
       {}
@@ -12,7 +30,7 @@ const LoginForm = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={submitHandler}>
             <div>
               <label
                 htmlFor="email"
@@ -28,6 +46,8 @@ const LoginForm = () => {
                   required
                   autoComplete="email"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-1.5"
+                  value={value.email}
+                  onChange={changeHandler}
                 />
               </div>
             </div>
@@ -42,12 +62,14 @@ const LoginForm = () => {
               </div>
               <div className="mt-2">
                 <input
-                  id="password"
+                  id="login-password"
                   name="password"
                   type="password"
                   required
                   autoComplete="current-password"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-1.5"
+                  value={value.password}
+                  onChange={changeHandler}
                 />
               </div>
             </div>
@@ -76,6 +98,4 @@ const LoginForm = () => {
       </div>
     </>
   );
-};
-
-export default LoginForm;
+}
