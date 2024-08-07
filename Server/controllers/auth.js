@@ -11,54 +11,57 @@ const removePassword = (data) => {
   return userData;
 };
 
-function register(req, res, next) {
+async function register(req, res, next) {
   const { userName, email, password, rePassword } = req.body;
+  console.log(userName, email, password);
 
-  return userModel
-    .create({ userName, email, password, rePassword })
-    .then((createdUser) => {
-      createdUser = bsonToJson(createdUser);
-      createdUser = removePassword(createdUser);
+  if (password !== rePassword) {
+    return res.status(400).send({ message: "Passwords do not match!" });
+  }
 
-      const token = utils.jwt.createToken({ id: createdUser._id });
-      if (process.env.NODE_ENV === "production") {
-        res.cookie(authCookieName, token, {
-          httpOnly: true,
-          sameSite: "none",
-          secure: true,
-        });
-      } else {
-        res.cookie(authCookieName, token, { httpOnly: true });
-      }
-      res.status(200).send(createdUser);
-    })
-    .catch((err) => {
-      if (err.name === "MongoError" && err.code === 11000) {
-        let field = err.message.split("index: ")[1];
-        field = field.split(" dup key")[0];
-        field = field.substring(0, field.lastIndexOf("_"));
+  try {
+    let createdUser = await userModel
+      .create({ userName, email, password });
+    createdUser = bsonToJson(createdUser);
+    createdUser = removePassword(createdUser);
 
-        res
-          .status(409)
-          .send({ message: `This ${field} is already registered!` });
-        return;
-      }
-      next(err);
-    });
+    const token = utils.jwt.createToken({ id: createdUser._id });
+    if (process.env.NODE_ENV === "production") {
+      res.cookie(authCookieName, token, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      });
+    } else {
+      res.cookie(authCookieName, token, { httpOnly: true });
+    }
+    res.status(200).send(createdUser);
+  } catch (err) {
+    if (err.name === "MongoError" && err.code === 11000) {
+      let field = err.message.split("index: ")[1];
+      field = field.split(" dup key")[0];
+      field = field.substring(0, field.lastIndexOf("_"));
+
+      res
+        .status(409)
+        .send({ message: `This ${field} is already registered!` });
+      return;
+    }
+    next(err);
+  }
 }
 
 function login(req, res, next) {
   const { email, password } = req.body;
 
-  userModel
-    .findOne({ email })
-    .then((user) => {
-      return Promise.all([user, user ? user.matchPassword(password) : false]);
-    })
-    .then(([user, match]) => {
+  userModel.findOne({ email }).then((user) => {
+    if (!user) {
+      return res.status(401).send({ message: "Wrong email or password" });
+    }
+
+    return Promise.all([user, user.matchPassword(password)]).then(([user, match]) => {
       if (!match) {
-        res.status(401).send({ message: "Wrong email or password" });
-        return;
+        return res.status(401).send({ message: "Wrong email or password" });
       }
       user = bsonToJson(user);
       user = removePassword(user);
@@ -75,8 +78,8 @@ function login(req, res, next) {
         res.cookie(authCookieName, token, { httpOnly: true });
       }
       res.status(200).send(user);
-    })
-    .catch(next);
+    });
+  }).catch(next);
 }
 
 function logout(req, res) {

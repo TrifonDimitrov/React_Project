@@ -12,8 +12,17 @@ async function requester(method, url, data) {
     options.body = JSON.stringify(data);
   }
 
+  console.log("Making request:", { method, url, data, options });
+
   const response = await fetch(url, options);
-  const result = response.json();
+  const result = await response.json();
+
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  console.log("Response received:", result);
 
   return result;
 }
