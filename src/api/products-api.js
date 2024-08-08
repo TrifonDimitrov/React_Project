@@ -10,4 +10,6 @@ export const getAll = async () => {
   return products;
 };
 
-export const getOne = (modelId) => request.get(`${BASE_URL}/${modelId}`)
+export const getOne = (modelId) => request.get(`${BASE_URL}/${modelId}`);
+
+export const createProduct = (productData) => request.post(`${BASE_URL}`, productData );
