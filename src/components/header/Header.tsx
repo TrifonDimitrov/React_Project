@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/authContext";
+import { useNavigate } from "react-router-dom";
 
 // const navigation = [
 //   { name: "Home", href: "/" },
@@ -13,7 +14,14 @@ import { AuthContext } from "../../contexts/authContext";
 
 
 export default function Header() {
-  const { isAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { logout, isAuthenticated } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');  // Пренасочване към началната страница
+  };
+ 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -54,13 +62,13 @@ export default function Header() {
               >
                 Create Product
               </a>
-              <a
+              <button
                 key="logout"
-                href="/logout"
+                onClick={handleLogout}
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
                 Logout
-              </a>
+              </button>
             </>
           ) : (
             <>
