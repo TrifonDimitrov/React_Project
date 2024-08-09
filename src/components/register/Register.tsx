@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
-import {register}  from "../../api/auth-api";
+import { useRegister } from "../../hooks/useAuth";
 
 const initialValues = { userName: "", email: "", password: "", rePassword: "" };
 
 export default function Register() {
+  const register = useRegister();
   const navigate = useNavigate();
   const [error, setError] = useState('');
 
@@ -22,7 +23,7 @@ export default function Register() {
       console.log("After calling register function in authApi");
       navigate("/");
     } catch (error) {
-      setError(error.massage)
+      setError(error.message)
       
     }
   };

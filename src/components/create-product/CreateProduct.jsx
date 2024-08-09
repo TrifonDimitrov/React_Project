@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { useForm } from "../../hooks/useForm";
 import { useCreateProduct } from "../../hooks/useProduct";
 import * as productApi from "../../api/products-api";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/authContext";
 
 const initialValues = {
   brand: "",
@@ -16,18 +17,19 @@ const initialValues = {
 };
 
 export default function CreateProduct() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const createProduct = useCreateProduct();
+  const { token } = useContext(AuthContext);
 
   const createHendler = async (value) => {
     try {
-       await createProduct(value);
-        navigate('/products')
+      await createProduct(value);
+      console.log(value);
+
+      navigate("/products");
     } catch (error) {
-        console.log(error);
-        
+      console.log("Error from Create product", error.message);
     }
-   
   };
 
   const { value, changeHandler, submitHandler } = useForm(

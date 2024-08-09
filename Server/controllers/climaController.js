@@ -1,4 +1,3 @@
-const { log } = require("console");
 const climaModel = require("../models/climaModel");
 
 function getAll(req, res, next) {

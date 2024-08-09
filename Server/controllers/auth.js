@@ -11,7 +11,7 @@ const removePassword = (data) => {
   return userData;
 };
 
-async function register(req, res, next) {
+ async function register(req, res, next) {
   const { userName, email, password, rePassword } = req.body;
   console.log(userName, email, password);
 
@@ -35,7 +35,7 @@ async function register(req, res, next) {
     } else {
       res.cookie(authCookieName, token, { httpOnly: true });
     }
-    res.status(200).send(createdUser);
+    res.status(200).send({user: createdUser, token, email });
   } catch (err) {
     if (err.name === "MongoError" && err.code === 11000) {
       let field = err.message.split("index: ")[1];
@@ -77,24 +77,36 @@ function login(req, res, next) {
       } else {
         res.cookie(authCookieName, token, { httpOnly: true });
       }
-      res.status(200).send(user);
+      res.status(200).send({user, token, email, userId: user._id });
     });
   }).catch(next);
 }
 
 function logout(req, res) {
-  const token = req.cookies[authCookieName];
+  const token = req.headers.authorization?.split(' ')[1];
 
-  tokenBlackList
-    .create({ token })
-    .then(() => {
-      res
-        .clearCookie(authCookieName)
-        .status(204)
-        .send({ message: "Logged out!" });
-    })
-    .catch((err) => res.send(err));
+  if (!token) {
+    return res.status(401).send({ message: "No token provided!" });
 }
+
+tokenBlackList
+        .create({ token })
+        .then(() => {
+            res.status(204).send({ message: "Logged out!" });
+        })
+        .catch((err) => res.status(500).send(err));
+}
+
+//   tokenBlackList
+//     .create({ token })
+//     .then(() => {
+//       res
+//         .clearCookie(authCookieName)
+//         .status(204)
+//         .send({ message: "Logged out!" });
+//     })
+//     .catch((err) => res.send(err));
+// }
 
 function getProfileInfo(req, res, next) {
   const { _id: userId } = req.user;

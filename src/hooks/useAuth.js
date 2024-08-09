@@ -1,4 +1,4 @@
-import { login } from "../api/auth-api";
+import { login, register } from "../api/auth-api";
 
 import { AuthContext } from "../contexts/authContext";
 import { useContext } from "react";
@@ -7,11 +7,26 @@ export const useLogin = () => {
   const { changeAuthState } = useContext(AuthContext);
 
   const loginHandler = async (email, password) => {
-    const {password:_, ...result} = await login(email, password);
+    try {
+      const result = await login(email, password);
+      handleLoginSuccess(result);
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
 
-    changeAuthState(result);
+  const handleLoginSuccess = (result) => {
+    localStorage.setItem("token", result.token);
+    localStorage.setItem("userId", result.userId); // Ако също записвате userId
+    localStorage.setItem("email", result.email); // Ако също записвате email
 
-    return result;
+    // Обновете състоянието на контекста
+    changeAuthState({
+      userId: result.userId,
+      email: result.email,
+      token: result.token,
+      isAuthenticated: true,
+    });
   };
 
   return loginHandler;
@@ -20,13 +35,29 @@ export const useLogin = () => {
 export const useRegister = () => {
   const { changeAuthState } = useContext(AuthContext);
 
-  const registerHandler = async ( userName, email, password, rePassword) => {
-    const {password:_, ...result} = await register( userName, email, password, rePassword);
+  const registerHandler = async (userName, email, password, rePassword) => {
+    try {
+      const result = await register(userName, email, password, rePassword);
+      handleRegisterSuccess(result);
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
+  };
 
-    changeAuthState(result);
+  const handleRegisterSuccess = (result) => {
+    localStorage.setItem("token", result.token);
+    localStorage.setItem("userId", result.userId); // Ако също записвате userId
+    localStorage.setItem("email", result.email); // Ако също записвате email
 
-    return result;
+    // Обновете състоянието на контекста
+    changeAuthState({
+      userId: result.userId,
+      email: result.email,
+      token: result.token,
+      isAuthenticated: true,
+    });
   };
 
   return registerHandler;
 };
+
