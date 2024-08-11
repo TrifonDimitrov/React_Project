@@ -12,14 +12,15 @@ export const getAll = async () => {
 
 export const getOne = (modelId) => request.get(`${BASE_URL}/${modelId}`);
 
-// export const createProduct = (productData, token) => request.post(`${BASE_URL}/create`, productData, token);
+export const deleteProduct = async (modelId) =>
+  await request.del(`${BASE_URL}/${modelId}`);
 
 export const createProduct = async (productData, token) => {
-  const response = await fetch('http://localhost:3000/api/climates', {
-    method: 'POST',
+  const response = await fetch("http://localhost:3000/api/climates", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`, // Изпращане на токена в заглавието
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // Изпращане на токена
     },
     body: JSON.stringify(productData),
   });
@@ -32,3 +33,17 @@ export const createProduct = async (productData, token) => {
   return await response.json();
 };
 
+export const editProduct = async (modelId, productData) => {
+  const response = await fetch(`${BASE_URL}/${modelId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(productData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Filed to edit product!");
+  }
+  return response.json();
+};
