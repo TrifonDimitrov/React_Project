@@ -5,12 +5,11 @@ async function requester(method, url, data) {
   };
 
   const token = localStorage.getItem("token");
-  console.log("Token from localStorage:", token);
-
+  
   if (token) {
     options.headers = {
       ...options.headers,
-      "Authorization": `Bearer ${token}`,  // Добавяне на Bearer префикс, ако е необходим
+      "Authorization": `Bearer ${token}`, 
     };
   }
 
@@ -26,8 +25,6 @@ async function requester(method, url, data) {
     options.body = JSON.stringify(data);
   }
 
-  console.log("Making request:", { method, url, data, options });
-
   const response = await fetch(url, options);
   const result = await response.json();
 
@@ -35,7 +32,6 @@ async function requester(method, url, data) {
     throw new Error(`Network response was not ok: ${response.statusText}`);
   }
 
-  console.log("Response received:", result);
 
   return result;
 }

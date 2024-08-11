@@ -27,7 +27,7 @@ export default function EditProduct() {
   const handleEdit = async () => {
     try {
       await productApi.editProduct(modelId, product);
-      navigate(`/products/${modelId}`);
+      navigate('/products');
     } catch (error) {
       console.log("Failed to edit product:", error);
     }

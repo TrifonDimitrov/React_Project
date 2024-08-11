@@ -2,7 +2,8 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import * as productsApi from "../../api/products-api";
 import { AuthContext } from "../../contexts/authContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+
 
 export default function ProductDetails() {
   const [product, setProduct] = useState({});
@@ -56,13 +57,13 @@ export default function ProductDetails() {
           {product.brand} {product.model}
         </h3>
         <p className="text-xl mb-2">
-          <strong>Price:</strong> {product.price}
+          <strong>Price:</strong> {product.price} лв.
         </p>
         <p className="text-lg mb-2">
-          <strong>Cooling Capacity:</strong> {product.coolingCapacity}
+          <strong>Cooling Capacity:</strong> {product.coolingCapacity} kW
         </p>
         <p className="text-lg mb-2">
-          <strong>Heating Capacity:</strong> {product.heatingCapacity}
+          <strong>Heating Capacity:</strong> {product.heatingCapacity} kW
         </p>
         <p className="text-lg mb-2">
           <strong>Energy Efficiency Rating:</strong>{" "}
@@ -79,6 +80,7 @@ export default function ProductDetails() {
             </button>
             <button
               onClick={handleDelete}
+              
               className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"
             >
               Delete

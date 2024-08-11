@@ -1,16 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/authContext";
-import { useNavigate } from "react-router-dom";
-
-// const navigation = [
-//   { name: "Home", href: "/" },
-//   { name: "Products", href: "/products" },
-//   { name: "Create Product", href: "/products/create" },
-//   { name: "Company", href: "/company" },
-//   { name: "Register", href: "/register" },
-//   { name: "Logout", href: "/logout" },
-// ];
-
+import { useNavigate, Link } from "react-router-dom";
 
 
 export default function Header() {
@@ -18,52 +8,53 @@ export default function Header() {
   const { logout, isAuthenticated } = useContext(AuthContext);
 
   const handleLogout = () => {
-    logout();
-    navigate('/');  // Пренасочване към началната страница
+    try {
+      logout();
+      navigate("/"); // Пренасочване към началната страница след успешен изход
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
- 
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
+      
       <nav
         aria-label="Global"
         className="flex items-center justify-between p-6 lg:px-8"
       >
         <div className="flex lg:flex-1">
-          <a href="/" className="-m-1.5 p-1.5">
+          <Link to="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Clima.bg</span>
             <img
               alt=""
               src="https://clima.bg/userfiles/logo/climabglogo.png"
               className="h-16 w-auto"
             />
-          </a>
+          </Link>
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
-          <a
-            key="home"
-            href="/"
+          <Link
+            to="/"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
             Home
-          </a>
-          <a
-            key="products"
-            href="/products"
+          </Link>
+          <Link
+            to="/products"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
             Products
-          </a>
+          </Link>
           {isAuthenticated ? (
             <>
-              <a
-                key="create-product"
-                href="/products/create"
+              <Link
+                to="/products/create"
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
                 Create Product
-              </a>
+              </Link>
               <button
-                key="logout"
                 onClick={handleLogout}
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
@@ -72,31 +63,28 @@ export default function Header() {
             </>
           ) : (
             <>
-              <a
-                key="register"
-                href="/register"
+              <Link
+                to="/register"
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
                 Register
-              </a>
+              </Link>
               <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                <a
-                  href="/login"
+                <Link
+                  to="/login"
                   className="text-sm font-semibold leading-6 text-gray-900"
                 >
                   Log in <span aria-hidden="true">&rarr;</span>
-                </a>
+                </Link>
               </div>
             </>
           )}
-
-          <a
-            key="company"
-            href="/company"
+          <Link
+            to="/company"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
             Company
-          </a>
+          </Link>
         </div>
       </nav>
     </header>

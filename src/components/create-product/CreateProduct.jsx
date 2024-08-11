@@ -1,9 +1,6 @@
-import { useContext } from "react";
 import { useForm } from "../../hooks/useForm";
 import { useCreateProduct } from "../../hooks/useProduct";
-import * as productApi from "../../api/products-api";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../contexts/authContext";
 
 const initialValues = {
   brand: "",
@@ -19,7 +16,6 @@ const initialValues = {
 export default function CreateProduct() {
   const navigate = useNavigate();
   const createProduct = useCreateProduct();
-  const { token } = useContext(AuthContext);
 
   const createHendler = async (value) => {
     try {
@@ -40,7 +36,11 @@ export default function CreateProduct() {
   return (
     <div className="container mt-20">
       <div className="max-w-md mx-auto">
-        <form onSubmit={submitHandler}>
+        <form
+          onSubmit={(e) => {
+            submitHandler(e);
+          }}
+        >
           <div className="mb-1">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -81,7 +81,7 @@ export default function CreateProduct() {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="coolingCapacity"
             >
-              Cooling Capacity
+              Cooling Capacity kW:
             </label>
             <input
               id="coolingCapacity"
@@ -98,7 +98,7 @@ export default function CreateProduct() {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="heatingCapacity"
             >
-              Heating Capacity
+              Heating Capacity kW:
             </label>
             <input
               id="heatingCapacity"
@@ -115,7 +115,7 @@ export default function CreateProduct() {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="energyEfficiencyRating"
             >
-              Energy Efficiency Rating
+              Energy Efficiency Rating A/A+++
             </label>
             <input
               id="energyEfficiencyRating"
@@ -132,7 +132,7 @@ export default function CreateProduct() {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="price"
             >
-              Price
+              Price 
             </label>
             <input
               id="price"

@@ -90,7 +90,6 @@ function deleteClima(req, res, next) {
       if (!clima) {
         return res.status(404).json({ message: 'Clima not found with id ' + modelId });
       }
-      console.log(modelId);
       res.json({ message: 'Clima deleted successfully' });
     })
     .catch(next); // Подаване на грешките към обработчика на грешки, ако такива възникнат

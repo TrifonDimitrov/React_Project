@@ -13,8 +13,7 @@ const removePassword = (data) => {
 
  async function register(req, res, next) {
   const { userName, email, password, rePassword } = req.body;
-  console.log(userName, email, password);
-
+  
   if (password !== rePassword) {
     return res.status(400).send({ message: "Passwords do not match!" });
   }
@@ -35,7 +34,7 @@ const removePassword = (data) => {
     } else {
       res.cookie(authCookieName, token, { httpOnly: true });
     }
-    res.status(200).send({user: createdUser, token, email });
+    res.status(200).send({user: createdUser, token, email, userId: createdUser._id });
   } catch (err) {
     if (err.name === "MongoError" && err.code === 11000) {
       let field = err.message.split("index: ")[1];

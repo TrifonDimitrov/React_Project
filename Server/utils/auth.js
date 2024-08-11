@@ -6,7 +6,6 @@ function auth(redirectUnauthenticated = true) {
     return function (req, res, next) {
       const token = req.headers.authorization?.split(' ')[1] || "";
       // const token = req.cookies[authCookieName] || "";
-      console.log("Received token:", token); // Логване на токена
       Promise.all([
         jwt.verifyToken(token),
         tokenBlackList.findOne({ token }),
