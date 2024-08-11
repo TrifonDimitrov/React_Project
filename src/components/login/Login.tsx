@@ -1,21 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "../../hooks/useForm";
 import { useLogin } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
+
 export default function Login() {
   const login = useLogin();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+
   const { value, changeHandler, submitHandler } = useForm(
     { email: "", password: "" },
-     async ({ email, password }) => {
-        try {
-           await login(email, password);
-           navigate('/')
-        } catch (error) {
-            console.log(error.massage);
-            
-        } 
+    async ({ email, password }) => {
+      try {
+        await login(email, password);
+        navigate("/");
+      } catch (error) {
+        console.log(error.message);
+        
+        if (error.response && error.response.status === 401) {
+          setErrorMessage("Invalid email or password.");
+        } else {
+          setErrorMessage("Invalid email or password.");
+        }
+      }
     }
   );
 
@@ -24,7 +32,7 @@ export default function Login() {
       {}
       <div className="flex min-h-full flex-1 flex-col justify-center m-10 px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-16 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Login form
           </h2>
         </div>
@@ -44,7 +52,7 @@ export default function Login() {
                   name="email"
                   type="email"
                   required
-                  autoComplete="email"
+                  autoComplete="off"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-1.5"
                   value={value.email}
                   onChange={changeHandler}
@@ -66,13 +74,16 @@ export default function Login() {
                   name="password"
                   type="password"
                   required
-                  autoComplete="current-password"
+                  autoComplete="off"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-1.5"
                   value={value.password}
                   onChange={changeHandler}
                 />
               </div>
             </div>
+            {errorMessage && (
+              <div className="text-red-500 text-sm">{errorMessage}</div>
+            )}
 
             <div>
               <button

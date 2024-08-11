@@ -23,7 +23,11 @@ export default function Register() {
       console.log("After calling register function in authApi");
       navigate("/");
     } catch (error) {
-      setError(error.message)
+      if (error.response && error.response.status === 409) {
+        setError("Username or email already exists.");
+      } else {
+        setError("Username or email already exists.");
+      }
       
     }
   };

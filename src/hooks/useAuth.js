@@ -12,6 +12,7 @@ export const useLogin = () => {
       handleLoginSuccess(result);
     } catch (error) {
       console.error("Error during login:", error);
+      return Promise.reject(error);
     }
   };
 
@@ -41,6 +42,7 @@ export const useRegister = () => {
       handleRegisterSuccess(result);
     } catch (error) {
       console.error("Error during registration:", error);
+      return Promise.reject(error);
     }
   };
 
