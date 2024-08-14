@@ -1,3 +1,4 @@
+const { userModel } = require("../models");
 const climaModel = require("../models/climaModel");
 
 function getAll(req, res, next) {
@@ -44,18 +45,21 @@ function createClima(req, res, next) {
       owner: req.user._id,
     })
     .then((clima) => {
-      // След като получите резултата, извикайте .populate() за да популирате връзките
-      return climaModel.populate(clima, { path: "climates" });
+      return climaModel.populate(clima, { path: "owner" });
     })
     .then((populatedClima) => {
-      res.status(201).json(populatedClima);
+      return userModel
+        .findByIdAndUpdate(req.user._id, {
+          $push: { climates: populatedClima._id },
+        })
+        .then(() => res.status(201).json(populatedClima));
     })
     .catch(next);
 }
 
 function updateClima(req, res, next) {
-  const { modelId } = req.params; // Идентификаторът на климатика за актуализация
-  // Обектът с данните за актуализация
+  const { modelId } = req.params;
+
   const updateData = {
     brand: req.body.brand,
     model: req.body.model,
@@ -68,31 +72,32 @@ function updateClima(req, res, next) {
   };
   console.log(updateData);
 
-  climaModel.findByIdAndUpdate(
-    modelId, 
-    updateData, 
-    { new: true } // Опции - връщане на актуализирания документ
-  )
-  .then(updatedClima => {
-    if (!updatedClima) {
-      return res.status(404).json({ message: 'Clima not found with id ' + modelId });
-    }
-    res.json(updatedClima);
-  })
-  .catch(next); // Подаване на грешките към обработчика на грешки, ако такива възникнат
+  climaModel
+    .findByIdAndUpdate(modelId, updateData, { new: true })
+    .then((updatedClima) => {
+      if (!updatedClima) {
+        return res
+          .status(404)
+          .json({ message: "Clima not found with id " + modelId });
+      }
+      res.json(updatedClima);
+    })
+    .catch(next);
 }
 
 function deleteClima(req, res, next) {
-  const { modelId } = req.params; // Идентификаторът на климатика за изтриване
+  const { modelId } = req.params;
   climaModel
-    .findByIdAndDelete(modelId) // Изтриване на климатика по идентификатор
+    .findByIdAndDelete(modelId)
     .then((clima) => {
       if (!clima) {
-        return res.status(404).json({ message: 'Clima not found with id ' + modelId });
+        return res
+          .status(404)
+          .json({ message: "Clima not found with id " + modelId });
       }
-      res.json({ message: 'Clima deleted successfully' });
+      res.json({ message: "Clima deleted successfully" });
     })
-    .catch(next); // Подаване на грешките към обработчика на грешки, ако такива възникнат
+    .catch(next);
 }
 
 module.exports = {
