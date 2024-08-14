@@ -80,10 +80,10 @@ export default function Header() {
             </>
           )}
           <Link
-            to="/company"
+            to="/profile"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
-            Company
+            Profile
           </Link>
         </div>
       </nav>

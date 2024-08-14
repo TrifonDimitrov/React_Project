@@ -5,13 +5,13 @@ import * as authApi from "./api/auth-api";
 import Header from "./components/header/Header";
 import Home from "./components/home/Home";
 import Products from "./components/product-list/Products";
-import Company from "./components/company/Company";
 import Register from "./components/register/Register";
 import Login from "./components/login/Login";
 import ProductDetails from "./components/details/ProductDetails";
 import EditProduct from "./components/details/EditProduct";
 import { AuthContext } from "./contexts/authContext";
 import CreateProduct from "./components/create-product/CreateProduct";
+import ProfilePage from "./components/profile-page/ProfilePage";
 
 function App() {
   const [authState, setAuthState] = useState({
@@ -30,7 +30,7 @@ function App() {
 
   const logout = async () => {
     try {
-      await authApi.logout(); // Ако има такава функция
+      await authApi.logout(); 
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
       localStorage.removeItem("email");
@@ -63,28 +63,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:modelId" element={<ProductDetails />} />
-          <Route
-            path="/products/create"
-            element={
-              authState.isAuthenticated ? (
-                <CreateProduct />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-
-          <Route
-            path="/products/edit/:modelId"
-            element={
-              authState.isAuthenticated ? (
-                <EditProduct />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route path="/company" element={<Company />} />
+          <Route path="/products/create"element={ authState.isAuthenticated ? (<CreateProduct />) : ( <Navigate to="/login" />)} />
+          <Route path="/products/edit/:modelId" element={ authState.isAuthenticated ? (<EditProduct />) : ( <Navigate to="/login" />)} />
+          <Route path="/profile" element={ authState.isAuthenticated ? (<ProfilePage/>) : (<Navigate to="/login"/>)} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>

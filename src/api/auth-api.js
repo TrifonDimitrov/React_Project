@@ -6,7 +6,7 @@ export const login = async (email, password) => {
   try {
     const result = await request.post(`${BASE_URL}/login`, { email, password });
     localStorage.setItem("token", result.token);
-    console.log('login result:', result);
+    console.log("login result:", result);
     return result;
   } catch (error) {
     console.error("Error during login:", error);
@@ -23,12 +23,10 @@ export const register = async (userName, email, password, rePassword) => {
       rePassword,
     });
     localStorage.setItem("token", result.token); // съхраняване на токена
-    
-    console.log('register result:', result);
-    
+
+    console.log("register result:", result);
+
     return result;
-    
-    
   } catch (error) {
     console.error("Error during registration:", error);
     throw error;
@@ -36,18 +34,40 @@ export const register = async (userName, email, password, rePassword) => {
 };
 
 export const logout = async () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const response = await fetch(`${BASE_URL}/logout`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
   });
 
   if (!response.ok) {
-    throw new Error('Logout failed');
+    throw new Error("Logout failed");
   }
 
   return {};
+};
+
+export const getProfileInfo = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/users/profile`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Failed fetching user data:", error);
+    throw error;
+  }
 };
