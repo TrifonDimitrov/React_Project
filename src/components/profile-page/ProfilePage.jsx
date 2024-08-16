@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { AuthContext } from "../../contexts/authContext";
+import ProductListItem from "../product-list/product-list-item/ProductListItem";
 
 import * as authApi from "../../api/auth-api";
 
@@ -51,10 +51,10 @@ useEffect(() => {
 
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-xl font-semibold mb-4">Your Products</h2>
-        {userData.products && userData.products.length > 0 ? (
+        {userData.climates && userData.climates.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {userData.products.map((product) => (
-              <ProductItem key={product._id} {...product} />
+            {userData.climates.map((product) => (
+              <ProductListItem key={product._id} {...product} />
             ))}
           </div>
         ) : (
