@@ -71,3 +71,43 @@ export const getProfileInfo = async () => {
     throw error;
   }
 };
+
+export const updateUserInfo = async (formData) => {
+  try {
+    const response = await fetch(`${BASE_URL}/users/profile/`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Not updating user info:' Status: ${response.status} `);
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Failed updating user data:", error);
+  }
+};
+
+export const deleteUser = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/users/profile/`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete user: ${response.status} `);
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Failed to delete user:", error);
+  }
+};

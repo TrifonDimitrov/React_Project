@@ -5,6 +5,7 @@ const {auth} = require('../utils');
 
 router.get('/profile', auth(), authController.getProfileInfo);
 router.put('/profile', auth(), authController.editProfileInfo);
+router.delete('/profile', auth(), authController.deleteProfile)
 
 
 

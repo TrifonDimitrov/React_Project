@@ -128,10 +128,25 @@ function editProfileInfo(req, res, next) {
     .catch(next);
 }
 
+function deleteProfile(req, res, next) {
+  const { _id: userId } = req.user;
+
+  userModel
+    .findByIdAndDelete(userId)
+    .then((deletedUser) => {
+      if (!deletedUser) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+      res.status(200).json({ message: "User deleted successfully" });
+    })
+    .catch(next);
+}
+
 module.exports = {
   register,
   login,
   logout,
   getProfileInfo,
   editProfileInfo,
+  deleteProfile,
 };
