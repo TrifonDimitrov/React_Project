@@ -12,7 +12,7 @@ export default function ProductListItem({
   imageUrl,
 }) {
   return (
-    <div key={_id} className="group">
+    <div className="group">
       <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
         <img
           alt={description}
