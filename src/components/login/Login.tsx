@@ -2,53 +2,50 @@ import React, { useState } from "react";
 import { useForm } from "../../hooks/useForm";
 import { useLogin } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-
+import Background from "../../style/Background";
 
 export default function Login() {
   const login = useLogin();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { value, changeHandler, submitHandler } = useForm(
+  const { value, changeHandler, submitHandler, resetForm } = useForm(
     { email: "", password: "" },
     async ({ email, password }) => {
       try {
         await login(email, password);
+        resetForm();
         navigate("/");
       } catch (error) {
         console.log(error.message);
-        
-        if (error.response && error.response.status === 401) {
-          setErrorMessage("Invalid email or password.");
-        } else {
-          setErrorMessage("Invalid email or password.");
-        }
+        setErrorMessage("Invalid email or password.");
       }
     }
   );
 
   return (
     <>
-      {}
-      <div className="flex min-h-full flex-1 flex-col justify-center m-10 px-6 py-12 lg:px-8">
+      <Background />
+      <div className=" absolute inset-0 flex min-h-screen flex-1 flex-col items-center justify-center px-6 py-12 lg:px-12">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-16 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Login form
           </h2>
         </div>
-
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={submitHandler}>
-            <div>
+          <form
+            className="space-y-6"
+            onSubmit={submitHandler}
+            autoComplete="off"
+          >
+            <div className="flex items-center justify-between">
               <label
                 htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-sm font-medium leading-6 text-gray-900 mt-2"
               >
                 Email
-              </label>
-              <div className="mt-2">
                 <input
-                  id="email"
+                  id="login-email"
                   name="email"
                   type="email"
                   required
@@ -57,18 +54,13 @@ export default function Login() {
                   value={value.email}
                   onChange={changeHandler}
                 />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Password
-                </label>
-              </div>
-              <div className="mt-2">
+              </label>
+
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium leading-6 text-gray-900 mt-2"
+              >
+                Password
                 <input
                   id="login-password"
                   name="password"
@@ -79,8 +71,9 @@ export default function Login() {
                   value={value.password}
                   onChange={changeHandler}
                 />
-              </div>
+              </label>
             </div>
+
             {errorMessage && (
               <div className="text-red-500 text-sm">{errorMessage}</div>
             )}

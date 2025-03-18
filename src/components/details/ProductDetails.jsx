@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import * as productsApi from "../../api/products-api";
 import { AuthContext } from "../../contexts/authContext";
 import { useNavigate, Link } from "react-router-dom";
-
+import Background from "../../style/Background";
 
 export default function ProductDetails() {
   const [product, setProduct] = useState({});
@@ -46,7 +46,8 @@ export default function ProductDetails() {
   console.log(isOwner);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 absolute">
+      <Background />
       <div className="max-w-md mx-auto">
         <img
           src={product.imageUrl}
@@ -80,7 +81,6 @@ export default function ProductDetails() {
             </button>
             <button
               onClick={handleDelete}
-              
               className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"
             >
               Delete

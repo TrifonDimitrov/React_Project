@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as productApi from "../../api/products-api";
+import Background from "../../style/Background";
 
 export default function EditProduct() {
   const [product, setProduct] = useState({});
@@ -27,7 +28,7 @@ export default function EditProduct() {
   const handleEdit = async () => {
     try {
       await productApi.editProduct(modelId, product);
-      navigate('/products');
+      navigate("/products");
     } catch (error) {
       console.log("Failed to edit product:", error);
     }
@@ -38,7 +39,8 @@ export default function EditProduct() {
   }
 
   return (
-    <div className="container mt-20">
+    <div className="container mt-2 absolute">
+      <Background />
       <div className="max-w-md mx-auto">
         <form
           onSubmit={(e) => {

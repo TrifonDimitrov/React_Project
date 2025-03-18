@@ -1,6 +1,7 @@
 import { useForm } from "../../hooks/useForm";
 import { useCreateProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
+import Background from "../../style/Background";
 
 const initialValues = {
   brand: "",
@@ -34,7 +35,8 @@ export default function CreateProduct() {
   );
 
   return (
-    <div className="container mt-20">
+    <div className="container mt-5 absolute">
+      <Background />
       <div className="max-w-md mx-auto">
         <form
           onSubmit={(e) => {
@@ -132,7 +134,7 @@ export default function CreateProduct() {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="price"
             >
-              Price 
+              Price
             </label>
             <input
               id="price"

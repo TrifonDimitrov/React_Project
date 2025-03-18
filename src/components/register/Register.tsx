@@ -2,24 +2,31 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 import { useRegister } from "../../hooks/useAuth";
+import Background from "../../style/Background";
 
 const initialValues = { userName: "", email: "", password: "", rePassword: "" };
 
 export default function Register() {
   const register = useRegister();
   const navigate = useNavigate();
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
-  const registerHandler = async ({ userName, email,  password, rePassword }) => {
-    console.log('From register component: ', userName, email, password, rePassword);
-    
+  const registerHandler = async ({ userName, email, password, rePassword }) => {
+    console.log(
+      "From register component: ",
+      userName,
+      email,
+      password,
+      rePassword
+    );
+
     if (password !== rePassword) {
-      setError('Password don`t match!')
+      setError("Password don`t match!");
       return;
     }
     try {
       console.log("Before calling register function in authApi");
-      await register( userName, email, password, rePassword);
+      await register(userName, email, password, rePassword);
       console.log("After calling register function in authApi");
       navigate("/");
     } catch (error) {
@@ -28,27 +35,39 @@ export default function Register() {
       } else {
         setError("Username or email already exists.");
       }
-      
     }
   };
 
-  const {value, changeHandler, submitHandler } = useForm(initialValues, registerHandler);
+  const { value, changeHandler, submitHandler } = useForm(
+    initialValues,
+    registerHandler
+  );
 
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center m-10 px-6 py-12 lg:px-8">
+      <Background />
+      <div className=" absolute inset-0 flex min-h-full flex-1 flex-col justify-center m-10 px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Register form
           </h2>
           {error && (
-          <h3 style={{fontSize: '18px', color: 'red', textAlign: 'center', paddingTop: '2em'} }>{error}</h3>
-        )} 
+            <h3
+              style={{
+                fontSize: "18px",
+                color: "red",
+                textAlign: "center",
+                paddingTop: "2em",
+              }}
+            >
+              {error}
+            </h3>
+          )}
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={submitHandler}>
-          <div>
+            <div>
               <label
                 htmlFor="userName"
                 className="block text-sm font-medium leading-6 text-gray-900"
