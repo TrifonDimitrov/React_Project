@@ -6,7 +6,6 @@ export const login = async (email, password) => {
   try {
     const result = await request.post(`${BASE_URL}/login`, { email, password });
     localStorage.setItem("token", result.token);
-    console.log("login result:", result);
     return result;
   } catch (error) {
     console.error("Error during login:", error);
