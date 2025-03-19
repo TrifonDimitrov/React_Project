@@ -11,7 +11,7 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ userName: "", email: "" });
   const navigate = useNavigate();
-  const {logout} = useContext(AuthContext)
+  const { logout } = useContext(AuthContext);
 
   const fetchUserData = () => {
     authApi
@@ -49,11 +49,11 @@ export default function ProfilePage() {
   };
 
   const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete your account?")) {
+    if (alert("Are you sure you want to delete your account?")) {
       authApi
         .deleteUser()
         .then(() => {
-          localStorage.removeItem('token');
+          localStorage.removeItem("token");
           logout();
           navigate("/register");
         })
@@ -78,13 +78,13 @@ export default function ProfilePage() {
 
   return (
     <>
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">
+      {" "}
+      <div className="w-[300px] h-[230px] text-left m-4 pl-2">
+        <h1 className="text-3xl font-bold mb-2">
           Profile of {userData?.userName || "Unknown User"}
         </h1>
-
-        <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-          <h2 className="text-xl font-semibold mb-2">User Information</h2>
+        <h2 className="text-xl font-semibold mb-2">User Information:</h2>
+        <div className="bg-white   ">
           {isEditing ? (
             <div>
               <label>
@@ -94,7 +94,7 @@ export default function ProfilePage() {
                   name="userName"
                   value={formData.userName}
                   onChange={handleInputChange}
-                  className="border rounded p-2 ml-2"
+                  className="border rounded p-2 ml-1 mb-1"
                 />
               </label>
               <label>
@@ -104,46 +104,47 @@ export default function ProfilePage() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="border rounded p-2 ml-2"
+                  className="border rounded p-2 ml-2 mb-2 "
                 />
               </label>
+
               <button
                 onClick={handleSave}
-                className="text-white bg-blue-500 hover:bg-blue-700 rounded p-2 ml-4"
+                className=" text-white bg-blue-500 hover:bg-blue-700 rounded p-3 ml-20 w-[100px]"
               >
                 Save
               </button>
             </div>
           ) : (
-            <div>
+            <div className="text-left ">
               <p>
                 <strong>Name:</strong> {userData.userName}
               </p>
               <p>
                 <strong>Email:</strong> {userData.email}
               </p>
-              <button
-                onClick={handleEdit}
-                className="text-white bg-blue-500 hover:bg-blue-700 rounded p-2 mt-4"
-              >
-                Edit
-              </button>
+              <div className="flex-1 ">
+                <button
+                  onClick={handleEdit}
+                  className=" text-white bg-blue-500 hover:bg-blue-700 rounded h-17 w-35 pl-12 pr-12  p-1.5 mr-2  "
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="text-white bg-red-500 hover:bg-red-700 rounded p-1.5 mt-4"
+                >
+                  Delete Account
+                </button>
+              </div>
             </div>
           )}
         </div>
-
-        <button
-          onClick={handleDelete}
-          className="text-white bg-red-500 hover:bg-red-700 rounded p-2 mt-4"
-        >
-          Delete Account
-        </button>
       </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-xl font-semibold mb-4">Your Products</h2>
+      <div className=" border-t-2 border-sky-300 bg-white p-6  m-4  ">
+        <h2 className="text-xl font-semibold mb-4">My Products</h2>
         {userData.climates && userData.climates.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className=" bg-red grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {userData.climates.map((product) => (
               <ProductListItem key={product._id} {...product} />
             ))}
