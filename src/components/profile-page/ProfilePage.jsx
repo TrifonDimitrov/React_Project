@@ -49,7 +49,7 @@ export default function ProfilePage() {
   };
 
   const handleDelete = () => {
-    if (alert("Are you sure you want to delete your account?")) {
+    if (window.confirm("Are you sure you want to delete your account?")) {
       authApi
         .deleteUser()
         .then(() => {
