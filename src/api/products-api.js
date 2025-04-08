@@ -16,11 +16,11 @@ export const deleteProduct = async (modelId) =>
   await request.del(`${BASE_URL}/${modelId}`);
 
 export const createProduct = async (productData, token) => {
-  const response = await fetch("http://localhost:3000/api/climates", {
+  const response = await fetch(`${BASE_URL}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // Изпращане на токена
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(productData),
   });
@@ -45,5 +45,21 @@ export const editProduct = async (modelId, productData) => {
   if (!response.ok) {
     throw new Error("Filed to edit product!");
   }
+  return response.json();
+};
+
+export const toggleLike = async (modelId) => {
+  const response = await fetch(`${BASE_URL}/${modelId}/like`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Filed to like product!");
+  }
+
   return response.json();
 };

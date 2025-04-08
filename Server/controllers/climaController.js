@@ -1,3 +1,4 @@
+const { log } = require("console");
 const { userModel } = require("../models");
 const climaModel = require("../models/climaModel");
 
@@ -100,10 +101,34 @@ function deleteClima(req, res, next) {
     .catch(next);
 }
 
+async function likeClima(req, res, next) {
+  try {
+    const userId = req.user.id;
+    const modelId = req.params.modelId;
+
+    const product = await climaModel.findById(modelId);
+
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    const hasLiked = product.likes.some((id) => id.toString() === userId);
+
+    if (hasLiked) {
+      product.likes = product.likes.filter((id) => id.toString() !== userId);
+    } else {
+      product.likes.push(userId);
+    }
+    await product.save();
+    res.status(200).json(product);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   getAll,
   getClima,
   createClima,
   updateClima,
   deleteClima,
+  likeClima,
 };
