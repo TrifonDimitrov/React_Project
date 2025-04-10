@@ -11,5 +11,6 @@ router.get("/:modelId", climaController.getClima);
 router.put("/:modelId", climaController.updateClima);
 router.delete("/:modelId", climaController.deleteClima);
 router.put("/:modelId/like", auth(), climaController.likeClima);
+router.post("/:modelId/buy", auth(), climaController.buyClima);
 
 module.exports = router;

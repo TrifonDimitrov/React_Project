@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import * as productApi from "../../../api/products-api";
 import { AuthContext } from "../../../contexts/authContext";
 
@@ -26,12 +26,18 @@ export default function ProductListItem({
     }
   };
 
+  useEffect(() => {
+    if (userId) {
+      setHasLiked(likes.includes(userId));
+    }
+  }, [userId, likes]);
+
   const hendlAlert = () => {
     return alert("Please login to like products!");
   };
 
   return (
-    <div className="group">
+    <div className="group mb-6">
       <div className=" aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
         <img
           src={imageUrl}

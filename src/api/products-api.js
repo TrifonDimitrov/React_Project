@@ -45,7 +45,7 @@ export const editProduct = async (modelId, productData) => {
   if (!response.ok) {
     throw new Error("Filed to edit product!");
   }
-  return response.json();
+  return await response.json();
 };
 
 export const toggleLike = async (modelId) => {
@@ -58,8 +58,22 @@ export const toggleLike = async (modelId) => {
   });
 
   if (!response.ok) {
-    throw new Error("Filed to like product!");
+    throw new Error("Failed to like product!");
   }
 
-  return response.json();
+  return await response.json();
+};
+
+export const buyProduct = async (modelId) => {
+  const response = await fetch(`${BASE_URL}/${modelId}/buy`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to buy product!");
+  }
+  return await response.json();
 };

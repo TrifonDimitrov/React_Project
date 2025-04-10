@@ -153,6 +153,19 @@ export default function ProfilePage() {
           <p>No products found</p>
         )}
       </div>
+      <div className=" border-t-2 border-sky-300 bg-white p-6  m-4  ">
+        <h2 className="text-xl font-semibold mb-4">Purchased Products</h2>
+
+        {userData.purchasedProducts?.length > 0 ? (
+          <div className=" bg-red grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {userData.purchasedProducts.map((product) => (
+              <ProductListItem key={product._id} {...product} />
+            ))}
+          </div>
+        ) : (
+          <p>No Purchased Products</p>
+        )}
+      </div>
     </>
   );
 }

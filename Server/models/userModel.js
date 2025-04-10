@@ -22,11 +22,19 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: [4, "Password should be at least 4 characters"],
     },
-    climates: [{
-      type: ObjectId,
-      ref: "Climate",
-      require: true,
-    }],
+    climates: [
+      {
+        type: ObjectId,
+        ref: "Climate",
+        require: true,
+      },
+    ],
+    purchasedProducts: [
+      {
+        type: ObjectId,
+        ref: "Climate",
+      },
+    ],
   },
   { timestamps: { createdAt: "created_at" } }
 );

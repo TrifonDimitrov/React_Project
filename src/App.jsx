@@ -12,10 +12,12 @@ import EditProduct from "./components/details/EditProduct";
 import { AuthContext } from "./contexts/authContext";
 import CreateProduct from "./components/create-product/CreateProduct";
 import ProfilePage from "./components/profile-page/ProfilePage";
+import Company from "./components/company/Company";
 
 function App() {
   const navigate = useNavigate();
   const storedToken = localStorage.getItem("token");
+  const [userRefreshTrigger, setUserRefreshTrigger] = useState(false);
 
   const [authState, setAuthState] = useState({
     userId: "",
@@ -48,10 +50,15 @@ function App() {
     navigate("/login");
   };
 
+  const refreshUser = () => {
+    setUserRefreshTrigger((prev) => !prev);
+  };
+
   const contextData = {
     ...authState,
     changeAuthState,
     logout,
+    refreshUser,
   };
 
   return (
@@ -95,6 +102,7 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/company" element={<Company />} />
         </Routes>
       </div>
     </AuthContext.Provider>

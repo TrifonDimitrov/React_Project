@@ -2,13 +2,13 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import * as productsApi from "../../api/products-api";
 import { AuthContext } from "../../contexts/authContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Background from "../../style/Background";
 
 export default function ProductDetails() {
   const [product, setProduct] = useState({});
   const { modelId } = useParams();
-  const { userId } = useContext(AuthContext);
+  const { userId, refreshUser, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,9 +41,18 @@ export default function ProductDetails() {
     }
   };
 
-  const isOwner = product.owner && product.owner._id === userId;
+  const hendleBuy = async () => {
+    try {
+      await productsApi.buyProduct(modelId);
+      refreshUser();
+      alert("You add this product in your profile!");
+      navigate("/products");
+    } catch (error) {
+      console.log("Failed to buy product!", error);
+    }
+  };
 
-  console.log(isOwner);
+  const isOwner = product.owner && product.owner._id === userId;
 
   return (
     <div className="container mx-auto px-4 py-8 absolute">
@@ -71,7 +80,7 @@ export default function ProductDetails() {
           {product.energyEfficiencyRating}
         </p>
         <p className="text-base mb-4">{product.description}</p>
-        {isOwner && (
+        {isOwner ? (
           <div className="flex justify-end space-x-4">
             <button
               onClick={handleEdit}
@@ -85,6 +94,19 @@ export default function ProductDetails() {
             >
               Delete
             </button>
+          </div>
+        ) : (
+          <div className="flex justify-center mt-10">
+            {isAuthenticated ? (
+              <button
+                onClick={hendleBuy}
+                className="bg-blue-500 text-white text-lg p-2 w-48 rounded hover:bg-blue-700"
+              >
+                Buy
+              </button>
+            ) : (
+              <p className="text-red-500 text-lg">Please log in to purchase</p>
+            )}
           </div>
         )}
       </div>

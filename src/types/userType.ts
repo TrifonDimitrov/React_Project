@@ -5,6 +5,7 @@ export interface UserProfile {
   email: string;
   userName: string;
   climates?: Climate[];
+  purchasedProducts?: Climate[];
   created_at?: string;
   updatedAt?: string;
 }

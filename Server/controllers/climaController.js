@@ -1,4 +1,3 @@
-const { log } = require("console");
 const { userModel } = require("../models");
 const climaModel = require("../models/climaModel");
 
@@ -71,7 +70,6 @@ function updateClima(req, res, next) {
     description: req.body.description,
     imageUrl: req.body.imageUrl,
   };
-  console.log(updateData);
 
   climaModel
     .findByIdAndUpdate(modelId, updateData, { new: true })
@@ -124,6 +122,26 @@ async function likeClima(req, res, next) {
   }
 }
 
+async function buyClima(req, res) {
+  try {
+    const userId = req.user.id;
+    const productId = req.params.modelId;
+
+    const user = await userModel.findById(userId);
+
+    if (!user.purchasedProducts.includes(productId)) {
+      user.purchasedProducts.push(productId);
+      await user.save();
+    }
+
+    res.status(200).json({ message: "Product purchased successfully!" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Parchased failed!", error: error.message });
+  }
+}
+
 module.exports = {
   getAll,
   getClima,
@@ -131,4 +149,5 @@ module.exports = {
   updateClima,
   deleteClima,
   likeClima,
+  buyClima,
 };

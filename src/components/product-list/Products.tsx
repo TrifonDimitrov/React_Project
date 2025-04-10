@@ -2,21 +2,10 @@ import React, { useEffect, useState } from "react";
 import * as productsApi from "../../api/products-api";
 import ProductListItem from "./product-list-item/ProductListItem";
 import Background from "../../style/Background";
-
-interface Product {
-  _id: string;
-  brand: string;
-  model: string;
-  coolingCapacity: string;
-  heatingCapacity: string;
-  energyEfficiencyRating: string;
-  price: string;
-  description: string;
-  imageUrl: string;
-}
+import { Climate } from "../../types/productType";
 
 export default function productList() {
-  const [products, setProduct] = useState<Product[]>([]);
+  const [products, setProduct] = useState<Climate[]>([]);
 
   useEffect(() => {
     productsApi.getAll().then((result) => setProduct(result));

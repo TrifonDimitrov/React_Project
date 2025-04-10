@@ -1,14 +1,33 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/authContext";
 import { useNavigate, Link } from "react-router-dom";
 
+import * as authApi from "../../api/auth-api";
+import { UserProfile } from "../../types/userType";
+
 export default function Header() {
   const navigate = useNavigate();
-  const { logout, isAuthenticated } = useContext(AuthContext);
+  const { logout, isAuthenticated, refreshUser } = useContext(AuthContext);
+  const [userData, setUserData] = useState<UserProfile | null>(null);
+
+  const fetchUserData = () => {
+    authApi
+      .getProfileInfo()
+      .then((data) => setUserData(data))
+      .catch((error) => {
+        console.error("Failed fetching user data:", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, [refreshUser]);
 
   const handleLogout = () => {
     try {
       logout();
+      localStorage.removeItem("token");
+      setUserData(null);
       navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -80,9 +99,14 @@ export default function Header() {
             )}
             <Link
               to="/profile"
-              className="text-base font-bold leading-6 text-gray-900 hover:text-blue-600"
+              className="text-base font-bold leading-6 text-gray-900 hover:text-blue-600 relative"
             >
               Profile
+              {userData?.purchasedProducts?.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-2">
+                  {userData?.purchasedProducts?.length}
+                </span>
+              )}
             </Link>
           </div>
         </nav>
